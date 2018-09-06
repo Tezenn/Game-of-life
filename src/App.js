@@ -5,10 +5,11 @@ import Grid from "./components/grid";
 class App extends Component {
   constructor() {
     super();
+    this.interv = "wait";
+    this.newBorns = 0;
     this.speed = 100;
     this.rows = 30;
     this.cols = 50;
-
     this.state = {
       generations: 0,
       gridFull: Array(this.rows)
@@ -17,17 +18,17 @@ class App extends Component {
     };
   }
 
+  //newCell = JSON.parse(JSON.stringify(this.state.generations));
+
   selectBox = (row, col) => {
     let prev = [...this.state.gridFull];
     prev[row][col] ? (prev[row][col] = false) : (prev[row][col] = true);
     this.setState({
       gridFull: prev
     });
-    console.log(row, col);
   };
 
   checkAround = (grid, row, col) => {
-    //debugger;
     let around = 0;
     if ((grid[row - 1] || {})[col - 1] && grid[row - 1][col - 1]) {
       around++;
@@ -61,6 +62,7 @@ class App extends Component {
     }
     if (around === 3 && !(grid[row] || {})[col]) {
       grid[row][col] = true;
+      this.newBorns++;
     }
   };
 
@@ -77,20 +79,67 @@ class App extends Component {
         <button
           className="center"
           onClick={() => {
-            setInterval(() => {
+            this.interv = setInterval(() => {
               const copy = JSON.parse(JSON.stringify(this.state.gridFull));
+
               for (let i = 0; i < this.state.gridFull.length; i++) {
                 for (let j = 0; j < this.cols; j++) {
                   this.checkAround(copy, i, j);
                 }
               }
-              this.setState({ gridFull: copy });
-            }, 50);
+              this.setState({
+                gridFull: copy,
+                generations: this.newBorns
+              });
+            }, 200);
           }}
         >
           Start
         </button>
-        <h2>Generations: {this.state.generations}</h2>
+        <button
+          className="center"
+          onClick={() => {
+            const copy = JSON.parse(JSON.stringify(this.state.gridFull));
+            for (let i = 0; i < this.state.gridFull.length; i++) {
+              for (let j = 0; j < this.cols; j++) {
+                if (Math.random() * 10 > 7) {
+                  copy[i][j] = true;
+                }
+              }
+            }
+            this.setState({ gridFull: copy });
+          }}
+        >
+          Random Cells
+        </button>
+        <button
+          className="center"
+          onClick={() => {
+            clearInterval(this.interv);
+          }}
+        >
+          Stop
+        </button>
+
+        <button
+          className="center"
+          onClick={() => {
+            const copy = JSON.parse(JSON.stringify(this.state.gridFull));
+            for (let i = 0; i < this.state.gridFull.length; i++) {
+              for (let j = 0; j < this.cols; j++) {
+                copy[i][j] = false;
+              }
+            }
+            this.newBorns = 0;
+            this.setState({
+              gridFull: copy,
+              generations: this.newBorns
+            });
+          }}
+        >
+          Clear Board
+        </button>
+        <h2>New Born Cells: {this.state.generations}</h2>
       </div>
     );
   }
