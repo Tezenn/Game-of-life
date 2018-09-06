@@ -35,6 +35,7 @@ body {
   margin: auto;
   box-shadow: 0px 0px 20px white;
   margin-top: 20px;
+  margin-bottom: 40px;
 }
 
 h1,
@@ -48,6 +49,34 @@ h4 {
   margin-top: 10px;
 }
 
+h1 {
+  margin-top: 35px;
+}
+
 h4 {
   margin-top: 0px;
+}
+
+button {
+  border: 0px;
+  padding: 4px;
+  border-radius: 3px;
+  box-shadow: 0px 0px 7px white;
+  font-size: 20px;
+  margin: 20px;
+  width: 150px;
+}
+
+.bottom {
+  margin-top: 30px;
+}
+
+.topBtn {
+  display: flex;
+  justify-content: center;
+}
+
+.botBtn {
+  display: flex;
+  justify-content: center;
 }
